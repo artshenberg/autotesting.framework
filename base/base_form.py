@@ -1,5 +1,9 @@
+from .browser_factory import BrowserFactory
+
+
 class BaseForm:
     def __init__(self, element, name):
+        self.driver = BrowserFactory.get_driver()
         self.element = element
         self.name = name
 

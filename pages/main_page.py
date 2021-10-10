@@ -1,9 +1,9 @@
-from base.base_page import BasePage
+from base.base_form import BaseForm
 from .locators import MainPageLocators
 from tests.test_data import TestData
 
-class MainPage(BasePage):
 
+class MainPage(BaseForm):
     def shoud_be_main_page(self):
         current_url = self.driver.get_current_url()
         assert current_url == TestData.BASE_URL,\
