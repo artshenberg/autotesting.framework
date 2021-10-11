@@ -1,12 +1,18 @@
 from selenium.common.exceptions import NoSuchElementException
-from .browser_factory import BrowserFactory
-from selenium.webdriver.common.by import By
+from utils.engine import Engine
+
+from traceback import print_stack
+import logging
+
+from utils.logger import use_logger
 
 
 class BaseElement:
     """
     Provides Base class for the Web Element
     """
+    log = use_logger(logging.DEBUG)
+
     def __init__(self, locator, name):
         """Constructor for BaseElement class"""
         self.locator = locator
@@ -18,7 +24,12 @@ class BaseElement:
 
     def click(self):
         """Do click on the element"""
-        self._find_element().click()
+        try:
+            self._find_element().click()
+            self.log.info(f'Click element {self.name}.')
+        except Exception:
+            self.log.error(f' ### Can\'t click on element {self.name}.')
+            print_stack()
 
     def get_attribute(self, attribute):
         """Get defined attribute of element"""
@@ -27,11 +38,10 @@ class BaseElement:
     def _find_element(self):
         """Returns Web Element by locator if it is presence on a page"""
         try:
-            return BrowserFactory().find_element(*self.locator)
+            element = Engine.find_element(*self.locator)
+            self.log.info(f'Element {self.name} is found.')
+            return element
         except NoSuchElementException:
-            print(f'Element {self.name} is not found.')
+            self.log.error(f' ### Element {self.name} is not found.')
+            print_stack()
             return False
-
-
-link = BaseElement((By.PARTIAL_LINK_TEXT, 'basic_auth'), 'basic_auth')
-assert link.is_displayed(link)

@@ -1,34 +1,43 @@
 import pytest
 from base.browser_factory import BrowserFactory
 
-@pytest.yield_fixture()
-def setUp():
-    print("Running method level setUp")
-    yield
-    print("Running method level tearDown")
+from traceback import print_stack
+import logging
+
+from utils.logger import use_logger
+from config.config import TestConfig
+from tests.test_data import TestData
 
 
-@pytest.yield_fixture(scope="class")
-def oneTimeSetUp(request, browser):
-    print("Running one time setUp")
-    factory = BrowserFactory(browser)
-    driver = factory.getWebDriverInstance()
-
-    if request.cls is not None:
-        request.cls.driver = driver
+@pytest.fixture(scope="class")
+def ones_set_up(request, browser):
+    log = use_logger(logging.DEBUG)
+    try:
+        log.info('Running one time set up...')
+        factory = BrowserFactory()
+        driver = factory.get_driver(browser)
+        driver.implicitly_wait(TestConfig.WAIT_TIME)
+        eval(TestConfig.WINDOW_SETTINGS)
+        driver.get(TestData.BASE_URL)
+        if request.cls is not None:
+            request.cls.driver = driver
+    except Exception:
+        log.error(f' ### Exception occurred while setting up browser {browser.upper()}.')
+        print_stack()
 
     yield driver
-    driver.quit()
-    print("Running one time tearDown")
+    try:
+        driver.quit()
+        log.info('Running one time tear down...')
+    except Exception:
+        log.error(f' ### Exception occurred while tearing down browser {browser.upper()}.')
+        print_stack()
+
 
 def pytest_addoption(parser):
     parser.addoption("--browser")
-    parser.addoption("--osType", help="Type of operating system")
+
 
 @pytest.fixture(scope="session")
 def browser(request):
     return request.config.getoption("--browser")
-
-@pytest.fixture(scope="session")
-def osType(request):
-    return request.config.getoption("--osType")

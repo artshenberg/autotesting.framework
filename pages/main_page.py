@@ -1,19 +1,20 @@
 from base.base_form import BaseForm
-from .locators import MainPageLocators
+from selenium.webdriver.common.by import By
+
 from tests.test_data import TestData
 
 
 class MainPage(BaseForm):
-    def shoud_be_main_page(self):
-        current_url = self.driver.get_current_url()
-        assert current_url == TestData.BASE_URL,\
-            f'\nMain page is not loaded. \nCurrent page URL is {current_url}'
 
-    def go_to_basic_auth(self):
-        self.driver
-        self.driver.get(TestData.LINK_BASIC_AUTH)
+    locators = {'link_basic_auth': (By.PARTIAL_LINK_TEXT, 'basic_auth'),
+                'link_javascript_alerts': (By.PARTIAL_LINK_TEXT, 'javascript_alerts'),
+                'link_horizontal_slider': (By.PARTIAL_LINK_TEXT, 'horizontal_slider'),
+                'link_hovers': (By.PARTIAL_LINK_TEXT, 'hovers'),
+                'link_iframe': (By.PARTIAL_LINK_TEXT, 'iframe')
+                }
 
-    def should_be_basic_auth_page(self):
-        current_url = self.driver.get_current_url()
-        assert current_url == TestData.LINK_BASIC_AUTH, \
-            f'\nBasic auth page is not loaded. \nCurrent page URL is {current_url}'
+    def should_be_main_page(self):
+        return self.current_url() == TestData.BASE_URL
+
+    def go_to_page(self, page):
+        pass

@@ -1,50 +1,62 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options as ChromOpts
+from selenium.webdriver.chrome.options import Options as ChromeOpts
 from selenium.webdriver.firefox.options import Options as FfOpts
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 
-from tests.test_data import TestData
+from traceback import print_stack
+import logging
+
+from utils.logger import use_logger
 from config.config import TestConfig
-from utils.singleton import Singleton
 
 
-class BrowserFactory(Singleton):
+class BrowserFactory:
     """
     Prepares, sets and returns webdriver
     """
-    def __init__(self, browser):
-        self.browser = browser
-
-    def get_driver(self):
+    @staticmethod
+    def get_driver(browser):
         """Sets and return webdriver with defined parameters"""
-        USER_LANGUAGE = TestConfig.BROWSER_LOCALE
-        WAIT_TIME = TestConfig.WAIT_TIME
-        BASE_URL = TestData.BASE_URL
-        if self.browser == 'chrome':
-            print('\nstart browser chrome for test...')
-            options = ChromOpts()
-            options.add_experimental_option('prefs', {'intl.accept_languages': USER_LANGUAGE})
-            driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(),
-                                      options=options)
-        elif self.browser == 'firefox':
-            print('\nstart browser firefox for test...')
-            profile = webdriver.FirefoxProfile()
-            profile.set_preference('intl.accept_languages', USER_LANGUAGE)
-            options = FfOpts()
-            driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(),
-                                       firefox_profile=profile,
-                                       firefox_options=options)
+        user_language = TestConfig.BROWSER_LOCALE
+        log = use_logger(logging.DEBUG)
+
+        if browser == 'chrome':
+            try:
+                print('\nstart browser chrome for test...')
+                options = ChromeOpts()
+                options.add_experimental_option('prefs', {'intl.accept_languages': user_language})
+                driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(),
+                                          options=options)
+                log.info(f'Start browser {browser.upper()}...')
+                return driver
+            except Exception:
+                log.error(f' ### Exception occurred while starting browser {browser.upper()}.')
+                print_stack()
+        elif browser == 'firefox':
+            try:
+                print('\nstart browser firefox for test...')
+                profile = webdriver.FirefoxProfile()
+                profile.set_preference('intl.accept_languages', user_language)
+                options = FfOpts()
+                driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(),
+                                           firefox_profile=profile,
+                                           firefox_options=options)
+                log.info(f'Start browser {browser.upper()}...')
+                return driver
+            except Exception:
+                log.error(f' ### Exception occurred when starting browser {browser.upper()}.')
+                print_stack()
         else:
-            # Sets default brouser
-            print('\nstart browser chrome for test...')
-            options = ChromOpts()
-            options.add_experimental_option('prefs', {'intl.accept_languages': USER_LANGUAGE})
-            driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(),
-                                      options=options)
-        driver.implicitly_wait(WAIT_TIME)
-        driver.maximize_window()
-        driver.get(BASE_URL)
-        yield driver
-        print('\nquit browser...')
-        driver.quit()
+            # Sets default browser
+            try:
+                print('\nstart browser chrome for test...')
+                options = ChromeOpts()
+                options.add_experimental_option('prefs', {'intl.accept_languages': user_language})
+                driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(),
+                                          options=options)
+                log.info(f'Start browser {browser.upper()}...')
+                return driver
+            except Exception:
+                log.error(f' ### Exception occurred when starting browser {browser.upper()}.')
+                print_stack()

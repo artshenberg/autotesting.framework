@@ -2,7 +2,7 @@ import inspect
 import logging
 
 
-def custom_logger(log_level=logging.DEBUG):
+def use_logger(log_level=logging.DEBUG):
     # Gets the name of the class / method from where this method is called
     logger_name = inspect.stack()[1][3]
     logger = logging.getLogger(logger_name)
