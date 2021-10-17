@@ -1,4 +1,3 @@
-from selenium.common.exceptions import NoSuchElementException
 from utils.engine import Engine
 
 from traceback import print_stack
@@ -20,7 +19,7 @@ class BaseElement:
 
     def is_displayed(self):
         """Check if element is presence on a page"""
-        return bool(self._find_element)
+        return self._find_element().is_displayed()
 
     def click(self):
         """Do click on the element"""
@@ -37,11 +36,4 @@ class BaseElement:
 
     def _find_element(self):
         """Returns Web Element by locator if it is presence on a page"""
-        try:
-            element = Engine.find_element(*self.locator)
-            self.log.info(f'Element {self.name} is found.')
-            return element
-        except NoSuchElementException:
-            self.log.error(f' ### Element {self.name} is not found.')
-            print_stack()
-            return False
+        return Engine.find_element(*self.locator)
