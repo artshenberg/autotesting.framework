@@ -1,3 +1,3 @@
 a.shenberg
 
-# This is the POM-based implementation of testing framework
+# This is the POM-based implementation of autotesting framework

@@ -1,17 +1,24 @@
-from pages.main_page import MainPage
-from .test_data import TestData
+from pom_pages.main_page import MainPage
+from utils.reader import DataLoader
 import pytest
 
+import logging
+from utils.logger import use_logger
+
+LOG = use_logger(logging.DEBUG)
+DATA = DataLoader.open_file('/tests/test_data.json')
+CONFIG = DataLoader.open_file('/config/config.json')
 
 # @pytest.mark.skip
-def test_basic_auth(browser):
-    page = MainPage(browser)
+def test_basic_auth(set_up):
+    page = MainPage(set_up, 'MainPage')
+    print('MainPage is here!')
     page.get_url()
     assert page.wait_for_open_main_page(), 'Main page is not opened'
     page.go_to_basic_auth()
     assert page.should_be_authorized(), 'Text is not valid'
 
-# @pytest.mark.skip
+@pytest.mark.skip
 def test_javascript_alerts(browser):
     page = MainPage(browser)
     page.go_to_js_alert_page()
@@ -30,7 +37,7 @@ def test_javascript_alerts(browser):
     page.accept_js_alert()
     assert page.check_js_prompt_result(), 'JS Prompt returns wrong result'
 
-# @pytest.mark.skip
+@pytest.mark.skip
 def test_horizontal_slider(browser):
     page = MainPage(browser)
     page.go_to_horizontal_slider_page()
@@ -38,8 +45,8 @@ def test_horizontal_slider(browser):
     page.move_slider_to_random_position()
     assert page.check_slider_value_after_move(), 'Slider value is not equal to random choice position'
 
-# @pytest.mark.skip
-@pytest.mark.parametrize('username', TestData.HOVER_PAGE_USER_NAMES)
+@pytest.mark.skip
+@pytest.mark.parametrize('username', DATA['hover_page']['HOVER_PAGE_USER_NAMES'])
 def test_hovers(browser, username):
     page = MainPage(browser)
     page.go_to_hovers_page()
@@ -51,7 +58,7 @@ def test_hovers(browser, username):
     page.go_to_previous_page()
     assert page.wait_for_open_hovers_page() , 'Hovers page is not opened'
 
-# @pytest.mark.skip
+@pytest.mark.skip
 def test_iframe(browser):
     page = MainPage(browser)
     page.go_to_iframe_page()
@@ -63,4 +70,37 @@ def test_iframe(browser):
     page.make_new_document()
     assert page.chek_if_document_is_new(), 'New document format is default'
 
+@pytest.mark.skip
+def test_javascript_alerts_via_js(browser):
+    page = MainPage(browser)
+    page.go_to_js_alert_page()
+    assert page.wait_for_open_js_alert_page(), 'Javascript Alerts page is not opened'
+    page.do_click_on_js_alerts_via_js()
+    assert page.get_js_alert(), 'JS Alert is not valid'
+    page.accept_js_alert()
+    assert page.check_js_alert_result(), 'JS Alert returns wrong result'
+    page.do_click_on_js_confirm_via_js()
+    assert page.get_js_confirm(), 'JS Confirm is not valid'
+    page.accept_js_alert()
+    assert page.check_js_confirm_result(), 'JS Confirm returns wrong result'
+    page.do_click_on_js_prompt_via_js()
+    assert page.get_js_prompt(), 'JS Prompt is not valid'
+    page.input_random_text_into_js_prompt()
+    page.accept_js_alert()
+    assert page.check_js_prompt_result(), 'JS Prompt returns wrong result'
 
+@pytest.mark.skip
+def test_infinite_scroll(browser):
+    page = MainPage(browser)
+    page.go_to_infinite_scroll_page()
+    AGE = DATA['infinite_scroll_page']['AGE_ENGINEER']
+    page.do_infinite_scroll(AGE)
+    assert page.check_if_number_of_paragraphs_is_equal_to_age(AGE)
+
+@pytest.mark.skip
+def test_upload(browser):
+    page = MainPage(browser)
+    page.get_url(TestData.LINK_UPLOAD)
+    page.do_upload_file(TestData.FILENAME)
+    assert page.check_if_upload_file_success(TestData.UPLOAD_FILE_SUCCESS_TEXT, TestData.FILENAME), \
+        'Page did not refresh and file name did not presence on a page'

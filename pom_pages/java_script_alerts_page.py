@@ -1,4 +1,5 @@
-from pages.base_form import BaseForm
+from pom_pages.base_form import BaseForm
+from pom_elements.base_element import BaseElement
 from selenium.webdriver.common.by import By
 
 from tests.test_data import TestData
@@ -6,9 +7,10 @@ from tests.test_data import TestData
 
 class JavaScriptAlertsPage(BaseForm):
 
-    button_bjsAlert = (By.XPATH, '//*[contains(@onclick,"jsAlert")]')
-    button_jsConfirm = (By.XPATH, '//*[contains(@onclick,"jsConfirm")]')
-    button_jsPrompt = (By.XPATH, '//*[contains(@onclick,"jsPrompt")]')
+    BUTTON_BJSALERT = BaseElement((By.XPATH, '//*[contains(@onclick,"jsAlert")]'), 'BUTTON_BJSALERT')
+    BUTTON_JSCONFIRM = BaseElement((By.XPATH, '//*[contains(@onclick,"jsConfirm")]'), 'BUTTON_JSCONFIRM')
+    BUTTON_JSPROMPT = BaseElement((By.XPATH, '//*[contains(@onclick,"jsPrompt")]'), 'BUTTON_JSPROMPT')
+
 
     def go_to_js_alert_page(self):
         self.get_url(TestData.LINK_JAVASCRIPT_ALERTS)

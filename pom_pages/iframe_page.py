@@ -1,4 +1,5 @@
-from pages.base_form import BaseForm
+from pom_pages.base_form import BaseForm
+from pom_elements.base_element import BaseElement
 from selenium.webdriver.common.by import By
 
 from tests.test_data import TestData
@@ -6,17 +7,21 @@ from tests.test_data import TestData
 
 class IFramePage(BaseForm):
 
-    align_left_button = (By.XPATH, '//*[@aria-label="Align left"]')
-    iframe = (By.TAG_NAME, 'iframe')
-    iframe_content_body = (By.XPATH, '//*[@id="tinymce"]')
-    iframe_content_text = (By.XPATH, '//p')
-    menubar_buttons = (By.XPATH, '//*[@role="menubar"]//button')
-    menu_format_font_sizes= (By.XPATH, '//*[contains(@title,"Font sizes")]')
-    menu_format_font_sizes_12pt = (By.XPATH, '//*[contains(@title,"12pt")]')
-    symbols = TestData.NUMBER_OF_SYMBOLS_TO_CHANGE
-    mutable_selector = [By.XPATH, '//*[contains(text(),"{}")]']
-    menu_new_document_button = (By.XPATH, '//*[contains(@title,"New document")]')
-    new_document_mark = (By.XPATH, '//*[contains(@data-mce-bogus,"1")]')
+    ALIGN_LEFT_BUTTON = BaseElement((By.XPATH, '//*[@aria-label="Align left"]'), 'ALIGN_LEFT_BUTTON')
+    IFRAME = BaseElement((By.TAG_NAME, 'iframe'), 'IFRAME')
+    IFRAME_CONTENT_BODY = BaseElement((By.XPATH, '//*[@id="tinymce"]'), 'IFRAME_CONTENT_BODY')
+    IFRAME_CONTENT_TEXT = BaseElement((By.XPATH, '//p'), 'IFRAME_CONTENT_TEXT')
+    MENUBAR_BUTTONS = BaseElement((By.XPATH, '//*[@role="menubar"]//button'), 'MENUBAR_BUTTONS')
+    MENU_FORMAT_FONT_SIZES= BaseElement((By.XPATH, '//*[contains(@title,"Font sizes")]'),
+                                        'MENU_FORMAT_FONT_SIZES')
+    MENU_FORMAT_FONT_SIZES_12PT = BaseElement((By.XPATH, '//*[contains(@title,"12pt")]'),
+                                              'MENU_FORMAT_FONT_SIZES_12PT')
+    SYMBOLS = TestData.NUMBER_OF_SYMBOLS_TO_CHANGE
+    MUTABLE_SELECTOR = [By.XPATH, '//*[contains(text(),"{}")]']
+    MENU_NEW_DOCUMENT_BUTTON = BaseElement((By.XPATH, '//*[contains(@title,"New document")]'),
+                                           'MENU_NEW_DOCUMENT_BUTTON')
+    NEW_DOCUMENT_MARK = BaseElement((By.XPATH, '//*[contains(@data-mce-bogus,"1")]'),
+                                    'NEW_DOCUMENT_MARK')
 
     def go_to_iframe_page(self):
         self.get_url(TestData.LINK_IFRAME)

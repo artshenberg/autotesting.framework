@@ -1,4 +1,5 @@
-from pages.base_form import BaseForm
+from pom_pages.base_form import BaseForm
+from pom_elements.base_element import BaseElement
 from selenium.webdriver.common.by import By
 
 from tests.test_data import TestData
@@ -6,11 +7,12 @@ from tests.test_data import TestData
 
 class HoversPage(BaseForm):
 
-    user_labels = (By.XPATH, '//*[@class="figure"]')
-    user_names = (By.XPATH, '//*[@class="figure"]//*[contains(text(),": ")]')
-    profile_links = (By.XPATH, '//*[@class="figcaption"]//a')
-    profile_page = (By.XPATH, '//*[contains(text(),"Not Found")]')
-    users_page = (By.XPATH, '//*[contains(text(),"Hovers")]')
+    USER_LABELS = BaseElement((By.XPATH, '//*[@class="figure"]'), 'USER_LABELS')
+    USER_NAMES = BaseElement((By.XPATH, '//*[@class="figure"]//*[contains(text(),": ")]'), 'USER_NAMES')
+    PROFILE_LINKS = BaseElement((By.XPATH, '//*[@class="figcaption"]//a'), 'PROFILE_LINKS')
+    PROFILE_PAGE = BaseElement((By.XPATH, '//*[contains(text(),"Not Found")]'), 'PROFILE_PAGE')
+    USERS_PAGE = BaseElement((By.XPATH, '//*[contains(text(),"Hovers")]'), 'USERS_PAGE')
+
 
     def go_to_hovers_page(self):
         self.get_url(TestData.LINK_HOVERS)

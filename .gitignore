@@ -1,3 +1,6 @@
 .pytest_cache/
 geckodriver.log
 pom.log
+assets/
+sandbox.py
+log.html

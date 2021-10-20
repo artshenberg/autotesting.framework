@@ -12,7 +12,8 @@ def use_logger(log_level=logging.DEBUG):
     file_handler = logging.FileHandler("pom.log", mode='a')
     file_handler.setLevel(log_level)
 
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s: %(message)s',
+    formatter = logging.Formatter('%(asctime)s - %(name)s - '
+                                  '%(levelname)s: %(message)s',
                                   datefmt='%m/%d/%Y %I:%M:%S %p')
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)

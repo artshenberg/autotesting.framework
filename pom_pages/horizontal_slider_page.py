@@ -1,4 +1,5 @@
-from pages.base_form import BaseForm
+from pom_pages.base_form import BaseForm
+from pom_elements.base_element import BaseElement
 from selenium.webdriver.common.by import By
 
 from tests.test_data import TestData
@@ -6,8 +7,8 @@ from tests.test_data import TestData
 
 class HorizontalSliderPage(BaseForm):
 
-    horizontal_slider = (By.XPATH, '//*[contains(@type,"range")]')
-    slider_value = (By.ID, '#range')
+    HORIZONTAL_SLIDER = BaseElement((By.XPATH, '//*[contains(@type,"range")]'), 'HORIZONTAL_SLIDER')
+    SLIDER_VALUE = BaseElement((By.ID, '#range'), 'SLIDER_VALUE')
 
     def go_to_horizontal_slider_page(self):
         self.get_url(TestData.LINK_HORIZONTAL_SLIDER)
