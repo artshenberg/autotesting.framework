@@ -1,43 +1,45 @@
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
+from selenium.webdriver.chrome.options import Options as ChromOpts
+from selenium.webdriver.firefox.options import Options as FfOpts
 import pytest
-from base.browser_factory import BrowserFactory
-
-from traceback import print_stack
-import logging
-
-from utils.logger import use_logger
-from config.config import TestConfig
-from tests.test_data import TestData
-
-
-@pytest.fixture(scope="class")
-def ones_set_up(request, browser):
-    log = use_logger(logging.DEBUG)
-    try:
-        log.info('Running one time set up...')
-        factory = BrowserFactory()
-        driver = factory.get_driver(browser)
-        driver.implicitly_wait(TestConfig.WAIT_TIME)
-        eval(TestConfig.WINDOW_SETTINGS)
-        driver.get(TestData.BASE_URL)
-        if request.cls is not None:
-            request.cls.driver = driver
-    except Exception:
-        log.error(f' ### Exception occurred while setting up browser {browser.upper()}.')
-        print_stack()
-
-    yield driver
-    try:
-        driver.quit()
-        log.info('Running one time tear down...')
-    except Exception:
-        log.error(f' ### Exception occurred while tearing down browser {browser.upper()}.')
-        print_stack()
 
 
 def pytest_addoption(parser):
-    parser.addoption("--browser")
+    parser.addoption('--language', action='store', default='ru',
+                     help='Choose lang')
+    parser.addoption('--browser_name', action='store', default='chrome',
+                     help='Choose browser: chrome or firefox')
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope='module')
 def browser(request):
-    return request.config.getoption("--browser")
+    browser_name = request.config.getoption('browser_name')
+    user_language = request.config.getoption('language')
+    if browser_name == 'chrome':
+        print('\nstart browser chrome for test...')
+        options = ChromOpts()
+        options.add_experimental_option('prefs', {'intl.accept_languages': user_language})
+        options.add_argument('window-size=1024,768')
+        driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(),
+                                  options=options)
+        driver.implicitly_wait(10)
+        driver.maximize_window()
+    elif browser_name == 'firefox':
+        print('\nstart browser firefox for test...')
+        profile = webdriver.FirefoxProfile()
+        profile.set_preference('intl.accept_languages', user_language)
+        options = FfOpts()
+        options.add_argument('--width=1024')
+        options.add_argument('--height=768')
+        driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(),
+                                   firefox_profile=profile,
+                                   firefox_options=options)
+        driver.implicitly_wait(10)
+        driver.maximize_window()
+    else:
+        print(f'Browser {browser_name} still is not implemented')
+    yield driver
+    print('\nquit browser...')
+    driver.quit()

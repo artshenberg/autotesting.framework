@@ -4,6 +4,8 @@ from selenium.webdriver.firefox.options import Options as FfOpts
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 
+from utils.singleton import Singleton
+
 from traceback import print_stack
 import logging
 
@@ -11,7 +13,7 @@ from utils.logger import use_logger
 from config.config import TestConfig
 
 
-class BrowserFactory:
+class BrowserFactory(Singleton):
     """
     Prepares, sets and returns webdriver
     """

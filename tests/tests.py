@@ -1,6 +1,7 @@
 from pages.main_page import MainPage
+from .test_data import TestData
 import pytest
-from tests.test_data import TestData
+
 
 # @pytest.mark.skip
 def test_basic_auth(browser):
