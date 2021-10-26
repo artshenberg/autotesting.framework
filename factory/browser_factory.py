@@ -3,7 +3,7 @@ from selenium.webdriver.chrome.options import Options as ChromeOpts
 from selenium.webdriver.firefox.options import Options as FfOpts
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
-
+from utils.singleton import Singleton
 from utils.logger import use_logger
 from utils.reader import DataLoader
 import logging
@@ -11,7 +11,7 @@ import logging
 CONFIG = DataLoader.open_file('/config/config.json')
 
 
-class BrowserFactory:
+class BrowserFactory(Singleton):
     """
     Prepares, sets and returns webdriver
     """
@@ -50,8 +50,9 @@ class BrowserFactory:
                                    firefox_options=options)
         return driver
 
+
     @staticmethod
     def get_driver():
-        if not BrowserFactory().instance:
-            return BrowserFactory().driver()
+        driver = BrowserFactory()
+        return driver.driver()
 

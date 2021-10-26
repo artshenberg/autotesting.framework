@@ -1,3 +1,4 @@
+from selenium.common.exceptions import *
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import logging
@@ -10,11 +11,18 @@ LOG = use_logger(logging.DEBUG)
 
 class Waits:
     """
-    Provides Selenium WebDriverWait
+    Provides Selenium WebDriverWaits
     """
     CONFIG = DataLoader.open_file('/config/config.json')
 
     @staticmethod
-    def wait(element, name,  timeout=CONFIG['WAIT_TIME']):
+    def wait_for_presence_of_element(element, name,  timeout=CONFIG['WAIT_TIME']):
         LOG.info(f'Waiting for maximum "{str(timeout)}" seconds for element "{name}" to be presence')
-        WebDriverWait(BrowserFactory.get_driver(), timeout=timeout).until(EC.presence_of_element_located(element))
+        WebDriverWait(BrowserFactory.get_driver(), timeout=timeout)\
+            .until(EC.presence_of_element_located(element))
+
+    @staticmethod
+    def wait_for_presence_of_elements(element, name,  timeout=CONFIG['WAIT_TIME']):
+        LOG.info(f'Waiting for maximum "{str(timeout)}" seconds for element "{name}" to be presence')
+        WebDriverWait(BrowserFactory.get_driver(), timeout=timeout)\
+            .until(EC.presence_of_all_elements_located(element))

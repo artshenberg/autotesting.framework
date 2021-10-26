@@ -1,32 +1,38 @@
 from pom_pages.base_form import BaseForm
-from pom_elements.base_element import BaseElement
+from pom_elements.button import Button
+from pom_elements.footer import Footer
+from pom_elements.text_field import TextField
+from pom_elements.page_text import PageText
 from selenium.webdriver.common.by import By
-from utils.reader import DataLoader
+from utils.engine import Engine
 
 
 class UploadPage(BaseForm):
 
-    CHOOSE_FILE_BUTTON = BaseElement((By.ID, 'file-upload'), 'CHOOSE_FILE_BUTTON')
-    UPLOAD_BUTTON = BaseElement((By.ID, 'file-submit'), 'UPLOAD_BUTTON')
-    FILE_UPLOAD_SUCCESS = BaseElement((By.XPATH, '//*[contains(text(),"File Uploaded!")]'), 'FILE_UPLOAD_SUCCESS')
-    UPLOADED_FILENAME_PRESENCE = BaseElement((By.ID, 'uploaded-files'), 'UPLOADED_FILENAME_PRESENCE')
-    DATA = DataLoader.open_file('/tests/test_data.json')['upload_page']
+    PAGE_NAME = 'upload_page'
 
+    # Elements:
+    CHOOSE_FILE_BUTTON = TextField((By.ID, 'file-upload'), 'CHOOSE_FILE_BUTTON')
+    UPLOAD_BUTTON = Button((By.ID, 'file-submit'), 'UPLOAD_BUTTON')
+    FILE_UPLOAD_SUCCESS = PageText((By.XPATH, '//*[contains(text(),"File Uploaded!")]'), 'FILE_UPLOAD_SUCCESS')
+    UPLOADED_FILENAME_PRESENCE = PageText((By.ID, 'uploaded-files'), 'UPLOADED_FILENAME_PRESENCE')
+    FOOTER = Footer((By.ID, 'page-footer'), 'FOOTER')
+
+    def __init__(self):
+        super(BaseForm, self).__init__()
+        self.element = self.FOOTER
+        self.name = self.PAGE_NAME
 
     def do_upload_file(self, filename):
-        choose_file_button = self.wait_for_open(*self.choose_file_button)
-        self.choose_file(choose_file_button, filename)
-        upload_button = self.find_element(*self.upload_button)
-        self.click(upload_button)
+        Engine.choose_file(self.CHOOSE_FILE_BUTTON, filename)
+        self.UPLOAD_BUTTON.click()
 
-    def check_if_page_is_refreshed(self):
-        return bool(not(self.is_element_present(*self.upload_button)))
+    def should_be_refreshed_page(self):
+        return bool(not(self.UPLOAD_BUTTON.wait_for_element()))
 
-    def check_if_upload_file_success(self, text):
-        file_upload_success_text = self.get_text(self.wait_for_open(*self.file_upload_success))
-        return file_upload_success_text == text
+    def should_be_success_text(self, text):
+        return self.FILE_UPLOAD_SUCCESS.get_text() == text
 
-    def check_if_file_name_is_presence(self, filename):
-        filename_is_presence = self.get_text(self.wait_for_open(*self.uploaded_filename_presence))
-        return filename_is_presence == filename
+    def should_be_file_name_presence(self, filename):
+        return self.UPLOADED_FILENAME_PRESENCE.get_text() == filename
 

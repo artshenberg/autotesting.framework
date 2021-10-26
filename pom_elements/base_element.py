@@ -48,4 +48,7 @@ class BaseElement:
             self.LOG.error(f' ### Can\'t find element "{self.name}".')
 
     def wait_for_element(self):
-        return Waits.wait(self.find_element(), self.name)
+        return Waits.wait_for_presence_of_element(self.locator, self.name)
+
+    def wait_for_elements(self):
+        return Waits.wait_for_presence_of_elements(self.locator, self.name)

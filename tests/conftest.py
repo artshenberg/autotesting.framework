@@ -15,11 +15,8 @@ def set_up(request):
     log.info('Running one time set up...')
     driver = BrowserFactory.get_driver()
     driver.maximize_window()
-    '''
-    # if singleton not works, try code below:
     if request.cls is not None:
         request.cls.driver = driver
-    '''
     yield driver
     log.info('Running one time tear down...')
     driver.quit()
