@@ -16,8 +16,8 @@ DATA = DataLoader.open_file('/tests/test_data.json')
 
 # @pytest.mark.skip
 def test_javascript_alerts_via_js():
-    page = JavaScriptAlertsPage()
     Engine.get_url(DATA['java_script_alerts_page']['URL'])
+    page = JavaScriptAlertsPage()
     assert page.wait_for_open(), \
         'Javascript Alerts page is not opened'
     page.do_click_on_button_jsalert_via_js()
@@ -45,8 +45,8 @@ def test_javascript_alerts_via_js():
 
 # @pytest.mark.skip
 def test_infinite_scroll():
-    page = InfiniteScrollPage()
     Engine.get_url(DATA['infinite_scroll_page']['URL'])
+    page = InfiniteScrollPage()
     page.wait_for_open()
     page.do_infinite_scroll(DATA['infinite_scroll_page']['AGE_ENGINEER'])
     assert page.should_be_same_number(DATA['infinite_scroll_page']['AGE_ENGINEER']), \
@@ -54,9 +54,10 @@ def test_infinite_scroll():
 
 
 # @pytest.mark.skip
+@pytest.mark.usefixtures('set_up')
 def test_upload():
-    page = UploadPage()
     Engine.get_url(DATA['upload_page']['URL'])
+    page = UploadPage()
     page.wait_for_open()
     page.do_upload_file(DATA['upload_page']['FILENAME'])
     assert page.should_be_refreshed_page(), \

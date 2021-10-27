@@ -19,9 +19,7 @@ class JavaScriptAlertsPage(BaseForm):
     FOOTER = Footer((By.ID, 'page-footer'), 'FOOTER')
 
     def __init__(self):
-        super(BaseForm, self).__init__()
-        self.element = self.FOOTER
-        self.name = self.PAGE_NAME
+        super(JavaScriptAlertsPage, self).__init__(self.FOOTER, self.PAGE_NAME)
 
     def do_click_on_button_jsalert_via_js(self):
         JSExecutor.js_click(self.BUTTON_JSALERT)

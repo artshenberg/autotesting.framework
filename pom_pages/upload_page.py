@@ -19,9 +19,7 @@ class UploadPage(BaseForm):
     FOOTER = Footer((By.ID, 'page-footer'), 'FOOTER')
 
     def __init__(self):
-        super(BaseForm, self).__init__()
-        self.element = self.FOOTER
-        self.name = self.PAGE_NAME
+        super(UploadPage, self).__init__(self.FOOTER, self.PAGE_NAME)
 
     def do_upload_file(self, filename):
         Engine.choose_file(self.CHOOSE_FILE_BUTTON, filename)

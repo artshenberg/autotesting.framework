@@ -14,9 +14,7 @@ class InfiniteScrollPage(BaseForm):
     FOOTER = Footer((By.ID, 'page-footer'), 'FOOTER')
 
     def __init__(self):
-        super(BaseForm, self).__init__()
-        self.element = self.FOOTER
-        self.name = self.PAGE_NAME
+        super(InfiniteScrollPage, self).__init__(self.FOOTER, self.PAGE_NAME)
 
     def should_be_infinite_scroll_page(self, url):
         return Engine.get_current_url() == url
