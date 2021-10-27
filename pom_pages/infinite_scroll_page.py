@@ -1,6 +1,6 @@
 from pom_pages.base_form import BaseForm
 from pom_elements.paragraph import Paragraph
-from pom_elements.footer import Footer
+from pom_elements.section import Section
 from selenium.webdriver.common.by import By
 from utils.engine import Engine
 
@@ -11,15 +11,10 @@ class InfiniteScrollPage(BaseForm):
 
     # Elements:
     JSCROLL_ADDED_ELEMENTS = Paragraph((By.CLASS_NAME, 'jscroll-added'), 'JSCROLL_ADDED_ELEMENTS')
-    FOOTER = Footer((By.ID, 'page-footer'), 'FOOTER')
+    JSCROLL_INNER = Section((By.CLASS_NAME, 'jscroll-inner'), 'JSCROLL_INNER')
 
     def __init__(self):
-        super(BaseForm, self).__init__()
-        self.element = self.FOOTER
-        self.name = self.PAGE_NAME
-
-    def should_be_infinite_scroll_page(self, url):
-        return Engine.get_current_url() == url
+        super(InfiniteScrollPage, self).__init__(self.JSCROLL_INNER, self.PAGE_NAME)
 
     def do_infinite_scroll(self, iterations):
         Engine.infinite_scrolling(self.JSCROLL_ADDED_ELEMENTS, iterations)

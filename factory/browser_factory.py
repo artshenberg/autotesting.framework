@@ -3,7 +3,6 @@ from selenium.webdriver.chrome.options import Options as ChromeOpts
 from selenium.webdriver.firefox.options import Options as FfOpts
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
-from utils.singleton import Singleton
 from utils.logger import use_logger
 from utils.reader import DataLoader
 import logging
@@ -11,24 +10,28 @@ import logging
 CONFIG = DataLoader.open_file('/config/config.json')
 
 
-class BrowserFactory(Singleton):
+class BrowserFactory:
     """
     Prepares, sets and returns webdriver
     """
+    driver = None
 
-    def driver(self):
+    @staticmethod
+    def get_driver():
         """Sets and return webdriver with defined parameters"""
         USER_LANGUAGE = CONFIG['BROWSER_LOCALE']
         BROWSER = CONFIG['BROWSER_NAME']
         LOG = use_logger(logging.DEBUG)
 
         if BROWSER == 'chrome':
-            return self._chrome(USER_LANGUAGE, BROWSER, LOG)
+            global driver
+            driver = BrowserFactory._chrome(USER_LANGUAGE, BROWSER, LOG)
+            return driver
         elif BROWSER == 'firefox':
-            return self._firefox(USER_LANGUAGE, BROWSER, LOG)
+            return BrowserFactory._firefox(USER_LANGUAGE, BROWSER, LOG)
         else:
             # Sets default browser
-            return self._chrome(USER_LANGUAGE, BROWSER, LOG)
+            return BrowserFactory._chrome(USER_LANGUAGE, BROWSER, LOG)
 
     @staticmethod
     def _chrome(user_language, browser, log):
@@ -50,9 +53,4 @@ class BrowserFactory(Singleton):
                                    firefox_options=options)
         return driver
 
-
-    @staticmethod
-    def get_driver():
-        driver = BrowserFactory()
-        return driver.driver()
-
+driver = BrowserFactory.get_driver()

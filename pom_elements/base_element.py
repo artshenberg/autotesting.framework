@@ -16,20 +16,10 @@ class BaseElement:
         self.locator = locator
         self.name = name
 
-    def is_displayed(self):
-        """Check if element is presence on a page"""
-        self.LOG.info(f'Checking if element "{self.name}" is displayed.')
-        return len(self.find_elements()) > 0
-
     def click(self):
         """Do click on the element"""
         self.LOG.info(f'Clicking on element "{self.name}".')
         self.find_element().click()
-
-    def get_attribute(self, attribute):
-        """Get defined attribute of element"""
-        self.LOG.info(f'Getting attribute "{attribute}" of element "{self.name}".')
-        return self.find_element().get_attribute(attribute)
 
     def find_element(self):
         """Returns Web Element by locator if it is presence on a page"""
@@ -47,8 +37,24 @@ class BaseElement:
         except NoSuchElementException:
             self.LOG.error(f' ### Can\'t find element "{self.name}".')
 
+    def get_attribute(self, attribute):
+        """Get defined attribute of element"""
+        self.LOG.info(f'Getting attribute "{attribute}" of element "{self.name}".')
+        return self.find_element().get_attribute(attribute)
+
+    def get_text(self):
+        self.LOG.info(f'Getting text of element "{self.name}".')
+        return self.find_element().text
+
+    def is_displayed(self):
+        """Check if element is presence on a page"""
+        self.LOG.info(f'Checking if element "{self.name}" is displayed.')
+        return len(self.find_elements()) > 0
+
     def wait_for_element(self):
+        self.LOG.info(f'Waiting for element "{self.name}".')
         return Waits.wait_for_presence_of_element(self.locator, self.name)
 
     def wait_for_elements(self):
+        self.LOG.info(f'Waiting for list of elements "{self.name}".')
         return Waits.wait_for_presence_of_elements(self.locator, self.name)

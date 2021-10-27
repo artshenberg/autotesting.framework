@@ -16,12 +16,9 @@ class JavaScriptAlertsPage(BaseForm):
     BUTTON_JSCONFIRM = Button((By.XPATH, '//*[contains(@onclick,"jsConfirm")]'), 'BUTTON_JSCONFIRM')
     BUTTON_JSPROMPT = Button((By.XPATH, '//*[contains(@onclick,"jsPrompt")]'), 'BUTTON_JSPROMPT')
     JS_ALERT_RESULT = PageText((By.ID, 'result'), 'JS_ALERT_RESULT')
-    FOOTER = Footer((By.ID, 'page-footer'), 'FOOTER')
 
     def __init__(self):
-        super(BaseForm, self).__init__()
-        self.element = self.FOOTER
-        self.name = self.PAGE_NAME
+        super(JavaScriptAlertsPage, self).__init__(self.JS_ALERT_RESULT, self.PAGE_NAME)
 
     def do_click_on_button_jsalert_via_js(self):
         JSExecutor.js_click(self.BUTTON_JSALERT)

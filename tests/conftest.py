@@ -13,11 +13,12 @@ CONFIG = DataLoader.open_file('/config/config.json')
 def set_up(request):
     log = use_logger(logging.DEBUG)
     log.info('Running one time set up...')
-    driver = BrowserFactory.get_driver()
-    driver.maximize_window()
     if request.cls is not None:
-        request.cls.driver = driver
-    yield driver
+        request.cls.driver = BrowserFactory.get_driver()
+    request.cls.driver.maximize_window()
+    yield request.cls.driver
     log.info('Running one time tear down...')
-    driver.quit()
+    request.addfinalizer(request.cls.driver.quit())
+    request.cls.driver = None
+
 
