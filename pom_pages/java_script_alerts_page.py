@@ -1,15 +1,13 @@
 from pom_pages.base_form import BaseForm
 from pom_elements.button import Button
 from pom_elements.page_text import PageText
-from pom_elements.footer import Footer
 from selenium.webdriver.common.by import By
-from utils.alerts import Alerts
 from utils.js_executor import JSExecutor
 
 
 class JavaScriptAlertsPage(BaseForm):
 
-    PAGE_NAME = 'infinite_scroll_page'
+    PAGE_NAME = 'java_script_alerts_page'
 
     # Elements:
     BUTTON_JSALERT = Button((By.XPATH, '//*[contains(@onclick,"jsAlert")]'), 'BUTTON_BJSALERT')

@@ -13,17 +13,21 @@ class Engine:
     @staticmethod
     def get_url(url):
         LOG.info(f'Getting URL "{url}".')
-        BrowserFactory.get_driver().get(url)
+        browser = BrowserFactory()
+        LOG.info(f'Driver instance id is "{id(browser)}".')
+        browser.get_driver().get(url)
 
     @staticmethod
     def authorize_by_url(login, password, url):
         url = url[:8] + login + ':' + password + '@' + url[8:]
         LOG.info(f'Authorizing by URL "{url}".')
-        BrowserFactory.get_driver().get(url)
+        browser = BrowserFactory()
+        browser.get_driver().get(url)
 
     @staticmethod
     def get_current_url():
-        return BrowserFactory.get_driver().current_url
+        browser = BrowserFactory()
+        return browser.get_driver().current_url
 
     @staticmethod
     def choose_file(element, filename):

@@ -1,3 +1,4 @@
+from singleton_decorator import singleton
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOpts
 from selenium.webdriver.firefox.options import Options as FfOpts
@@ -10,12 +11,11 @@ import logging
 CONFIG = DataLoader.open_file('/config/config.json')
 
 
+@singleton
 class BrowserFactory:
     """
     Prepares, sets and returns webdriver
     """
-    driver = None
-
     @staticmethod
     def get_driver():
         """Sets and return webdriver with defined parameters"""
@@ -24,33 +24,26 @@ class BrowserFactory:
         LOG = use_logger(logging.DEBUG)
 
         if BROWSER == 'chrome':
-            global driver
-            driver = BrowserFactory._chrome(USER_LANGUAGE, BROWSER, LOG)
+            LOG.info(f'Start browser {BROWSER.upper()}...')
+            options = ChromeOpts()
+            options.add_experimental_option('prefs', {'intl.accept_languages': USER_LANGUAGE})
+            driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(),
+                                      options=options)
             return driver
         elif BROWSER == 'firefox':
-            return BrowserFactory._firefox(USER_LANGUAGE, BROWSER, LOG)
+            LOG.info(f'Start browser {BROWSER.upper()}...')
+            profile = webdriver.FirefoxProfile()
+            profile.set_preference('intl.accept_languages', USER_LANGUAGE)
+            options = FfOpts()
+            driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(),
+                                       firefox_profile=profile,
+                                       firefox_options=options)
+            return driver
         else:
             # Sets default browser
-            return BrowserFactory._chrome(USER_LANGUAGE, BROWSER, LOG)
-
-    @staticmethod
-    def _chrome(user_language, browser, log):
-        log.info(f'Start browser {browser.upper()}...')
-        options = ChromeOpts()
-        options.add_experimental_option('prefs', {'intl.accept_languages': user_language})
-        driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(),
-                                  options=options)
-        return driver
-
-    @staticmethod
-    def _firefox(user_language, browser, log):
-        log.info(f'Start browser {browser.upper()}...')
-        profile = webdriver.FirefoxProfile()
-        profile.set_preference('intl.accept_languages', user_language)
-        options = FfOpts()
-        driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(),
-                                   firefox_profile=profile,
-                                   firefox_options=options)
-        return driver
-
-driver = BrowserFactory.get_driver()
+            LOG.info(f'Start browser {BROWSER.upper()}...')
+            options = ChromeOpts()
+            options.add_experimental_option('prefs', {'intl.accept_languages': USER_LANGUAGE})
+            driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(),
+                                      options=options)
+            return driver

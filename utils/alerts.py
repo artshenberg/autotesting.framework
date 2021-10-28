@@ -14,12 +14,11 @@ class Alerts:
     CONFIG = DataLoader.open_file('/config/config.json')
 
     @staticmethod
-    def wait_for_alert(timeout=CONFIG['WAIT_TIME']):
-        wait = WebDriverWait(BrowserFactory.get_driver(), timeout=timeout,
-                             ignored_exceptions=[NoSuchElementException,
-                                                 ElementNotVisibleException,
-                                                 ElementNotSelectableException])
-        return wait.until(EC.alert_is_present())
+    def switch_to_alert():
+        try:
+            return BrowserFactory.get_driver().switch_to.alert
+        except NoAlertPresentException:
+            return False
 
     @staticmethod
     def get_alert_text(alert):
