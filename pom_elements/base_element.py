@@ -43,6 +43,7 @@ class BaseElement:
         return self.find_element().get_attribute(attribute)
 
     def get_text(self):
+        self.LOG.info(f'Getting text of element "{self.name}".')
         return self.find_element().text
 
     def is_displayed(self):
@@ -51,7 +52,9 @@ class BaseElement:
         return len(self.find_elements()) > 0
 
     def wait_for_element(self):
+        self.LOG.info(f'Waiting for element "{self.name}".')
         return Waits.wait_for_presence_of_element(self.locator, self.name)
 
     def wait_for_elements(self):
+        self.LOG.info(f'Waiting for list of elements "{self.name}".')
         return Waits.wait_for_presence_of_elements(self.locator, self.name)

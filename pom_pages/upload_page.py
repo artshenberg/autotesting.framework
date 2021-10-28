@@ -1,6 +1,6 @@
 from pom_pages.base_form import BaseForm
 from pom_elements.button import Button
-from pom_elements.footer import Footer
+from pom_elements.drag_n_drop_field import DragNDropField
 from pom_elements.text_field import TextField
 from pom_elements.page_text import PageText
 from selenium.webdriver.common.by import By
@@ -12,14 +12,14 @@ class UploadPage(BaseForm):
     PAGE_NAME = 'upload_page'
 
     # Elements:
-    CHOOSE_FILE_BUTTON = TextField((By.ID, 'file-upload'), 'CHOOSE_FILE_BUTTON')
+    CHOOSE_FILE = TextField((By.ID, 'file-upload'), 'CHOOSE_FILE_BUTTON')
     UPLOAD_BUTTON = Button((By.ID, 'file-submit'), 'UPLOAD_BUTTON')
     FILE_UPLOAD_SUCCESS = PageText((By.XPATH, '//*[contains(text(),"File Uploaded!")]'), 'FILE_UPLOAD_SUCCESS')
     UPLOADED_FILENAME_PRESENCE = PageText((By.ID, 'uploaded-files'), 'UPLOADED_FILENAME_PRESENCE')
-    FOOTER = Footer((By.ID, 'page-footer'), 'FOOTER')
+    DRAG_DROP_UPLOAD_FIELD = DragNDropField((By.ID, 'drag-drop-upload'), 'DRAG_DROP_UPLOAD_FIELD')
 
     def __init__(self):
-        super(UploadPage, self).__init__(self.FOOTER, self.PAGE_NAME)
+        super(UploadPage, self).__init__(self.DRAG_DROP_UPLOAD_FIELD, self.PAGE_NAME)
 
     def do_upload_file(self, filename):
         Engine.choose_file(self.CHOOSE_FILE_BUTTON, filename)

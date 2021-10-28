@@ -16,16 +16,12 @@ class JavaScriptAlertsPage(BaseForm):
     BUTTON_JSCONFIRM = Button((By.XPATH, '//*[contains(@onclick,"jsConfirm")]'), 'BUTTON_JSCONFIRM')
     BUTTON_JSPROMPT = Button((By.XPATH, '//*[contains(@onclick,"jsPrompt")]'), 'BUTTON_JSPROMPT')
     JS_ALERT_RESULT = PageText((By.ID, 'result'), 'JS_ALERT_RESULT')
-    FOOTER = Footer((By.ID, 'page-footer'), 'FOOTER')
 
     def __init__(self):
-        super(JavaScriptAlertsPage, self).__init__(self.FOOTER, self.PAGE_NAME)
+        super(JavaScriptAlertsPage, self).__init__(self.JS_ALERT_RESULT, self.PAGE_NAME)
 
     def do_click_on_button_jsalert_via_js(self):
         JSExecutor.js_click(self.BUTTON_JSALERT)
-
-    def get_jsalert(self, text):
-        return Alerts.get_alert_text(Alerts.wait_for_alert('alert')) == text
 
     def should_be_same_alert_text(self, text):
         return self.JS_ALERT_RESULT.get_text() == text
@@ -33,16 +29,5 @@ class JavaScriptAlertsPage(BaseForm):
     def do_click_on_button_jsconfirm_via_js(self):
         JSExecutor.js_click(self.BUTTON_JSCONFIRM)
 
-    def get_jsconfirm(self, text):
-        return Alerts.get_alert_text(Alerts.wait_for_alert('confirm')) == text
-
     def do_click_on_button_jsprompt_via_js(self):
         JSExecutor.js_click(self.BUTTON_JSPROMPT)
-
-    def get_jsprompt(self, text):
-        return Alerts.get_alert_text(Alerts.wait_for_alert('prompt')) == text
-
-
-
-
-

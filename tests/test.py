@@ -16,53 +16,53 @@ DATA = DataLoader.open_file('/tests/test_data.json')
 
 # @pytest.mark.skip
 def test_javascript_alerts_via_js():
-    Engine.get_url(DATA['java_script_alerts_page']['URL'])
+    TEST_DATA = DATA['java_script_alerts_page']
+    Engine.get_url(TEST_DATA['URL'])
     page = JavaScriptAlertsPage()
     assert page.wait_for_open(), \
         'Javascript Alerts page is not opened'
     page.do_click_on_button_jsalert_via_js()
-    assert page.get_jsalert(DATA['java_script_alerts_page']['ALERT_TEXT']), \
+    assert Alerts.get_alert_text(Alerts.wait_for_alert()) == TEST_DATA['ALERT_TEXT'], \
         'JS Alert is not valid'
-    Alerts.alert_accept(Alerts.wait_for_alert('alert'))
-    assert page.should_be_same_alert_text(DATA['java_script_alerts_page']['ALERT_RESULT']), \
+    Alerts.alert_accept(Alerts.wait_for_alert())
+    assert page.should_be_same_alert_text(TEST_DATA['ALERT_RESULT']), \
         'JS Alert returns wrong result'
     page.do_click_on_button_jsconfirm_via_js()
-    assert page.get_jsconfirm(DATA['java_script_alerts_page']['CONFIRM_TEXT']), \
+    assert Alerts.get_alert_text(Alerts.wait_for_alert()) == TEST_DATA['CONFIRM_TEXT'], \
         'JS Confirm is not valid'
-    Alerts.alert_accept(Alerts.wait_for_alert('confirm'))
-    assert page.should_be_same_alert_text(DATA['java_script_alerts_page']['CONFIRM_RESULT']), \
+    Alerts.alert_accept(Alerts.wait_for_alert())
+    assert page.should_be_same_alert_text(TEST_DATA['CONFIRM_RESULT']), \
         'JS Confirm returns wrong result'
     page.do_click_on_button_jsprompt_via_js()
-    assert page.get_jsprompt(DATA['java_script_alerts_page']['PROMPT_TEXT']), \
+    assert Alerts.get_alert_text(Alerts.wait_for_alert()) == TEST_DATA['PROMPT_TEXT'], \
         'JS Prompt is not valid'
     RANDOM_TEXT = random_text()
-    Alerts.alert_send_keys(Alerts.wait_for_alert('prompt'), RANDOM_TEXT)
-    Alerts.alert_accept(Alerts.wait_for_alert('prompt'))
-    assert page.should_be_same_alert_text(DATA['java_script_alerts_page']['PROMPT_RESULT']
-                                          + RANDOM_TEXT), \
+    Alerts.alert_send_keys(Alerts.wait_for_alert(), RANDOM_TEXT)
+    Alerts.alert_accept(Alerts.wait_for_alert())
+    assert page.should_be_same_alert_text(TEST_DATA['PROMPT_RESULT'] + RANDOM_TEXT), \
         'JS Prompt returns wrong result'
 
 
 # @pytest.mark.skip
 def test_infinite_scroll():
-    Engine.get_url(DATA['infinite_scroll_page']['URL'])
+    TEST_DATA = DATA['infinite_scroll_page']
+    Engine.get_url(TEST_DATA['URL'])
     page = InfiniteScrollPage()
-    page.wait_for_open()
-    page.do_infinite_scroll(DATA['infinite_scroll_page']['AGE_ENGINEER'])
-    assert page.should_be_same_number(DATA['infinite_scroll_page']['AGE_ENGINEER']), \
+    page.do_infinite_scroll(TEST_DATA['AGE_ENGINEER'])
+    assert page.should_be_same_number(TEST_DATA['AGE_ENGINEER']), \
         'The number of paragraphs is not equal to the age of the engineer'
 
 
 # @pytest.mark.skip
 @pytest.mark.usefixtures('set_up')
 def test_upload():
-    Engine.get_url(DATA['upload_page']['URL'])
+    TEST_DATA = DATA['upload_page']
+    Engine.get_url(TEST_DATA['URL'])
     page = UploadPage()
-    page.wait_for_open()
-    page.do_upload_file(DATA['upload_page']['FILENAME'])
+    page.do_upload_file(TEST_DATA['FILENAME'])
     assert page.should_be_refreshed_page(), \
         'The page is not refreshed'
-    assert page.should_be_success_text(DATA['upload_page']['UPLOAD_FILE_SUCCESS_TEXT']), \
+    assert page.should_be_success_text(TEST_DATA['UPLOAD_FILE_SUCCESS_TEXT']), \
         'The success text is not present on a page'
-    assert page.should_be_file_name_presence(DATA['upload_page']['FILENAME']), \
+    assert page.should_be_file_name_presence(TEST_DATA['FILENAME']), \
         'The filename is not present on a page'
