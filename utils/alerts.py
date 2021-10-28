@@ -14,19 +14,12 @@ class Alerts:
     CONFIG = DataLoader.open_file('/config/config.json')
 
     @staticmethod
-    def wait_for_alert(alert_type, timeout=CONFIG['WAIT_TIME']):
+    def wait_for_alert(timeout=CONFIG['WAIT_TIME']):
         wait = WebDriverWait(BrowserFactory.get_driver(), timeout=timeout,
                              ignored_exceptions=[NoSuchElementException,
                                                  ElementNotVisibleException,
                                                  ElementNotSelectableException])
-        if alert_type == 'alert':
-            alert = wait.until(EC.alert_is_present())
-        elif alert_type == 'confirm' or 'prompt':
-            wait.until(EC.alert_is_present())
-            alert = self.driver.switch_to.alert
-        else:
-            print(' ### Unexpected alert type')
-        return alert
+        return wait.until(EC.alert_is_present())
 
     @staticmethod
     def get_alert_text(alert):

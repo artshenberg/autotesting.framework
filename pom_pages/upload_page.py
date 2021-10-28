@@ -12,7 +12,7 @@ class UploadPage(BaseForm):
     PAGE_NAME = 'upload_page'
 
     # Elements:
-    CHOOSE_FILE_BUTTON = TextField((By.ID, 'file-upload'), 'CHOOSE_FILE_BUTTON')
+    CHOOSE_FILE = TextField((By.ID, 'file-upload'), 'CHOOSE_FILE_BUTTON')
     UPLOAD_BUTTON = Button((By.ID, 'file-submit'), 'UPLOAD_BUTTON')
     FILE_UPLOAD_SUCCESS = PageText((By.XPATH, '//*[contains(text(),"File Uploaded!")]'), 'FILE_UPLOAD_SUCCESS')
     UPLOADED_FILENAME_PRESENCE = PageText((By.ID, 'uploaded-files'), 'UPLOADED_FILENAME_PRESENCE')

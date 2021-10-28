@@ -17,8 +17,8 @@ DATA = DataLoader.open_file('/tests/test_data.json')
 # @pytest.mark.skip
 def test_javascript_alerts_via_js():
     TEST_DATA = DATA['java_script_alerts_page']
-    Engine.get_url(TEST_DATA['URL'])
     page = JavaScriptAlertsPage()
+    Engine.get_url(TEST_DATA['URL'])
     assert page.wait_for_open(), \
         'Javascript Alerts page is not opened'
     page.do_click_on_button_jsalert_via_js()
@@ -46,9 +46,8 @@ def test_javascript_alerts_via_js():
 # @pytest.mark.skip
 def test_infinite_scroll():
     TEST_DATA = DATA['infinite_scroll_page']
-    Engine.get_url(TEST_DATA['URL'])
     page = InfiniteScrollPage()
-    page.wait_for_open()
+    Engine.get_url(TEST_DATA['URL'])
     page.do_infinite_scroll(TEST_DATA['AGE_ENGINEER'])
     assert page.should_be_same_number(TEST_DATA['AGE_ENGINEER']), \
         'The number of paragraphs is not equal to the age of the engineer'
@@ -58,9 +57,8 @@ def test_infinite_scroll():
 @pytest.mark.usefixtures('set_up')
 def test_upload():
     TEST_DATA = DATA['upload_page']
-    Engine.get_url(TEST_DATA['URL'])
     page = UploadPage()
-    page.wait_for_open()
+    Engine.get_url(TEST_DATA['URL'])
     page.do_upload_file(TEST_DATA['FILENAME'])
     assert page.should_be_refreshed_page(), \
         'The page is not refreshed'

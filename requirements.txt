@@ -1,0 +1,4 @@
+logging==0.4.9.6
+pytest==6.2.5
+selenium==3.141.0
+webdriver-manager==3.4.2
