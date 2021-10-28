@@ -9,7 +9,7 @@ from utils.js_executor import JSExecutor
 
 class JavaScriptAlertsPage(BaseForm):
 
-    PAGE_NAME = 'infinite_scroll_page'
+    PAGE_NAME = 'java_script_alerts_page'
 
     # Elements:
     BUTTON_JSALERT = Button((By.XPATH, '//*[contains(@onclick,"jsAlert")]'), 'BUTTON_BJSALERT')

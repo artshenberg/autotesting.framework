@@ -25,7 +25,8 @@ class BaseElement:
         """Returns Web Element by locator if it is presence on a page"""
         try:
             self.LOG.info(f'Finding element "{self.name}".')
-            return BrowserFactory.get_driver().find_element(*self.locator)
+            browser = BrowserFactory()
+            return browser.get_driver().find_element(*self.locator)
         except NoSuchElementException:
             self.LOG.error(f' ### Can\'t find element "{self.name}".')
 
@@ -33,7 +34,12 @@ class BaseElement:
         """Returns Web Elements list by locator if they are presence on a page"""
         try:
             self.LOG.info(f'Finding element "{self.name}".')
-            return BrowserFactory.get_driver().find_elements(*self.locator)
+            browser = BrowserFactory()
+            self.LOG.info(f'Driver instance id is "{id(browser)}".')
+            driver = browser.get_driver()
+            driver.find_elements(*self.locator)
+            driver.quite()
+            return
         except NoSuchElementException:
             self.LOG.error(f' ### Can\'t find element "{self.name}".')
 

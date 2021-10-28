@@ -18,11 +18,13 @@ class Waits:
     @staticmethod
     def wait_for_presence_of_element(element, name,  timeout=CONFIG['WAIT_TIME']):
         LOG.info(f'Waiting for maximum "{str(timeout)}" seconds for element "{name}" to be presence')
-        WebDriverWait(BrowserFactory.get_driver(), timeout=timeout)\
+        browser = BrowserFactory()
+        WebDriverWait(browser.get_driver(), timeout=timeout)\
             .until(EC.presence_of_element_located(element))
 
     @staticmethod
     def wait_for_presence_of_elements(element, name,  timeout=CONFIG['WAIT_TIME']):
         LOG.info(f'Waiting for maximum "{str(timeout)}" seconds for element "{name}" to be presence')
-        WebDriverWait(BrowserFactory.get_driver(), timeout=timeout)\
+        browser = BrowserFactory()
+        WebDriverWait(browser.get_driver(), timeout=timeout)\
             .until(EC.presence_of_all_elements_located(element))

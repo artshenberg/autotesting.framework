@@ -12,11 +12,12 @@ CONFIG = DataLoader.open_file('/config/config.json')
 @pytest.fixture(scope="function")
 def set_up(request):
     log = use_logger(logging.DEBUG)
-    log.info('Running one time set up...')
-    driver = BrowserFactory.get_driver()
+    log.info('=================== Running one time set up... ===================')
+    browser = BrowserFactory()
+    driver = browser.get_driver()
     driver.maximize_window()
     yield driver
-    log.info('Running one time tear down...')
+    log.info('=================== Running one time tear down... ===================')
     request.addfinalizer(driver.quit())
     driver = None
 

@@ -15,7 +15,8 @@ class Alerts:
 
     @staticmethod
     def wait_for_alert(timeout=CONFIG['WAIT_TIME']):
-        wait = WebDriverWait(BrowserFactory.get_driver(), timeout=timeout,
+        browser = BrowserFactory()
+        wait = WebDriverWait(browser.get_driver(), timeout=timeout,
                              ignored_exceptions=[NoSuchElementException,
                                                  ElementNotVisibleException,
                                                  ElementNotSelectableException])

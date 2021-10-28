@@ -3,6 +3,8 @@ from pom_pages.infinite_scroll_page import InfiniteScrollPage
 from pom_pages.upload_page import UploadPage
 import pytest
 
+from factory.browser_factory import BrowserFactory
+
 import logging
 from utils.logger import use_logger
 from utils.reader import DataLoader
@@ -15,11 +17,12 @@ DATA = DataLoader.open_file('/tests/test_data.json')
 
 
 # @pytest.mark.skip
-def test_javascript_alerts_via_js():
+@pytest.mark.usefixtures('set_up')
+def test_javascript_alerts_via_js(set_up):
     TEST_DATA = DATA['java_script_alerts_page']
     Engine.get_url(TEST_DATA['URL'])
     page = JavaScriptAlertsPage()
-    assert page.wait_for_open(), \
+    assert page.is_displayed(), \
         'Javascript Alerts page is not opened'
     page.do_click_on_button_jsalert_via_js()
     assert Alerts.get_alert_text(Alerts.wait_for_alert()) == TEST_DATA['ALERT_TEXT'], \
@@ -43,7 +46,7 @@ def test_javascript_alerts_via_js():
         'JS Prompt returns wrong result'
 
 
-# @pytest.mark.skip
+@pytest.mark.skip
 def test_infinite_scroll():
     TEST_DATA = DATA['infinite_scroll_page']
     Engine.get_url(TEST_DATA['URL'])
@@ -53,8 +56,7 @@ def test_infinite_scroll():
         'The number of paragraphs is not equal to the age of the engineer'
 
 
-# @pytest.mark.skip
-@pytest.mark.usefixtures('set_up')
+@pytest.mark.skip
 def test_upload():
     TEST_DATA = DATA['upload_page']
     Engine.get_url(TEST_DATA['URL'])

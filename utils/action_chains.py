@@ -7,5 +7,6 @@ class Actions:
 
     @staticmethod
     def press_key_down():
-        move = webdriver.ActionChains(BrowserFactory.get_driver())
+        browser = BrowserFactory()
+        move = webdriver.ActionChains(browser.get_driver())
         move.key_down(Keys.ARROW_DOWN).perform()
