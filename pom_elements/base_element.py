@@ -1,8 +1,8 @@
 from selenium.common.exceptions import *
-from factory.browser_factory import BrowserFactory
 import logging
 from utils.logger import use_logger
 from utils.webdriver_waits import Waits
+from utils.driver_util import DriverUtil
 
 
 class BaseElement:
@@ -25,8 +25,7 @@ class BaseElement:
         """Returns Web Element by locator if it is presence on a page"""
         try:
             self.LOG.info(f'Finding element "{self.name}".')
-            browser = BrowserFactory()
-            return browser.get_driver().find_element(*self.locator)
+            return DriverUtil().get_driver().find_element(*self.locator)
         except NoSuchElementException:
             self.LOG.error(f' ### Can\'t find element "{self.name}".')
 
@@ -34,12 +33,7 @@ class BaseElement:
         """Returns Web Elements list by locator if they are presence on a page"""
         try:
             self.LOG.info(f'Finding element "{self.name}".')
-            browser = BrowserFactory()
-            self.LOG.info(f'Driver instance id is "{id(browser)}".')
-            driver = browser.get_driver()
-            driver.find_elements(*self.locator)
-            driver.quite()
-            return
+            return DriverUtil().get_driver().find_elements(*self.locator)
         except NoSuchElementException:
             self.LOG.error(f' ### Can\'t find element "{self.name}".')
 
@@ -62,5 +56,5 @@ class BaseElement:
         return Waits.wait_for_presence_of_element(self.locator, self.name)
 
     def wait_for_elements(self):
-        self.LOG.info(f'Waiting for list of elements "{self.name}".')
-        return Waits.wait_for_presence_of_elements(self.locator, self.name)
+        self.LOG.info(f'Waiting for a list of elements "{self.name}".')
+        return Waits.wait_for_presence_of_all_elements(self.locator, self.name)
